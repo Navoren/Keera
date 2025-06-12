@@ -67,7 +67,7 @@ export async function getProject(projectId) {
         });
 
         if (!project) {
-            throw new Error("Project not found");
+            return null;
         }
 
         if(project.organizationId !== orgId) {
@@ -82,14 +82,15 @@ export async function getProject(projectId) {
 }
 
 export async function deleteProject(projectId) {
-    const { userId, sessionClaims, orgRole } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
+    const orgRole = sessionClaims?.o?.rol;
 
 if (!userId || !orgId) {
     throw new Error("Unauthorized");
 }
 
-if (orgRole !== "org:admin") {
+if (orgRole !== "admin") {
     throw new Error("Only organization admins can delete projects");
 }
 

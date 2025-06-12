@@ -14,12 +14,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { BarLoader } from "react-spinners";
 import { projectSchema } from "@/lib/zodValidators";
 import { createProject } from "@/actions/projects";
+import { useRouter } from 'next/navigation';
 
 const ProjectCreate = () => {
 
     const { isLoaded: isOrgLoaded, membership } = useOrganization();
     const { isLoaded: isUserLoaded } = useUser();
     const [isAdmin, setIsAdmin] = useState(false);
+    const router = useRouter();
     
     const {register, handleSubmit, formState:{errors}} = useForm({
         resolver: zodResolver(projectSchema),
@@ -45,6 +47,14 @@ const ProjectCreate = () => {
     }, [isOrgLoaded, isUserLoaded, membership]);
 
     const { loading, error, data: project, fn: createProjectFn} = useFetch(createProject);
+
+    useEffect(() => {
+    if (project) router.push(`/project/${project.id}`);
+  }, [loading]);
+
+  if (!isOrgLoaded || !isUserLoaded) {
+    return null;
+  }
 
     if (!isOrgLoaded || !isUserLoaded) {
         return null;
