@@ -3,7 +3,7 @@
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
-export async function createSprint({ projectId, data }) {
+export async function createSprint( projectId, data) {
     const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
@@ -87,7 +87,7 @@ export async function updateSprintStatus(sprintId, newStatus) {
             data: { status: newStatus },
         });
 
-        return { updatedSprint, message: `Sprint status updated to ${newStatus}` };
+        return { updatedSprint, message: `Sprint status updated to ${newStatus}`, success: true };
     } catch (error) {
         console.error("Error updating sprint status:", error.message);
         throw new Error("Failed to update sprint status");

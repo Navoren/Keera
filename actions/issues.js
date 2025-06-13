@@ -154,7 +154,8 @@ export async function deleteIssue(issueId) {
         if (!issue) {
             throw new Error("Issue not found");
         }
-        if (issue.project.organizationId !== orgId) {
+        if (issue.reporterId !== user.id &&
+    !issue.project.adminIds.includes(user.id)) {
             throw new Error("Unauthorized access to issue");
         }
 
