@@ -4,11 +4,17 @@ import SprintCreateForm from '@/app/(main)/project/_components/sprint-create';
 import React from 'react'
 import { MessageCircleOff } from 'lucide-react';
 import SprintBoard from '@/app/(main)/project/_components/sprint-board';
+import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 
 const ProjectPage = async ({ params }) => {
   
   const { projectId } = await params;
   const project = await getProject(projectId);
+
+  const shortName = uniqueNamesGenerator({
+  dictionaries: [adjectives, animals, colors],
+  length: 2
+});
 
   if (!project) {
     notFound();
@@ -21,7 +27,7 @@ const ProjectPage = async ({ params }) => {
           projectTitle={project.name}
           projectKey={project.key}
           projectDescription={project.description}
-          sprintKey={project.sprints?.length + 1}
+          sprintKey={project.name + shortName}
         />
       </div>
       <div>
@@ -39,7 +45,7 @@ const ProjectPage = async ({ params }) => {
                   </div>
                 </div>
         ) : (
-          <div>
+          <div className='py-4'>
             <h2 className='text-2xl font-bold'>Sprints</h2>
               <SprintBoard
                 sprints={project.sprints}

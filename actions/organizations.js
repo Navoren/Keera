@@ -4,7 +4,7 @@ import { db } from "@/lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function getOrganization(slug) {
-  const { userId } = await auth();
+  const { userId } = auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
@@ -42,7 +42,7 @@ export async function getOrganization(slug) {
 }
 
 export async function getProjects(orgId) {
-  const { userId } = await auth();
+  const { userId } = auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
@@ -62,40 +62,8 @@ export async function getProjects(orgId) {
   return projects;
 }
 
-export async function getUserIssues(userId) {
-  const { sessionClaims } = await auth();
-  const orgId = sessionClaims?.o?.id;
-
-  if(!userId || !orgId) {
-    throw new Error("Unauthorized");
-  }
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-  if (!user) {
-    throw new Error("User not found");
-  }
-  const issues = await db.issue.findMany({
-    where: {
-      OR: [{ assigneeId: user.id }, { reporterId: user.id }],
-      project: {
-        organizationId: orgId,
-      },
-    },
-    include: {
-      project: true,
-      assignee: true,
-      reporter: true,
-    },
-    orderBy: { updatedAt: "desc" },
-  });
-
-  return issues;
-}
-
 export async function getOrganizationUsers(orgId) {
-  const { userId } = await auth();
+  const { userId } = auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }

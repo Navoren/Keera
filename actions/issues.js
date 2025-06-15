@@ -4,7 +4,7 @@ import {db} from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
 export async function createIssue(projectId, data) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -37,8 +37,6 @@ export async function createIssue(projectId, data) {
         include: {
             assignee: true,
             reporter: true,
-            project: true,
-            sprint: true,
         },
     });
 
@@ -46,7 +44,7 @@ export async function createIssue(projectId, data) {
 }
 
 export async function getIssuesForSprint(sprintId) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -57,8 +55,8 @@ export async function getIssuesForSprint(sprintId) {
     where: { sprintId: sprintId },
     orderBy: [{ status: "asc" }, { order: "asc" }],
     include: {
-      assignee: true,
-      reporter: true,
+    assignee: true,
+    reporter: true,
     },
   });
 
@@ -66,7 +64,7 @@ export async function getIssuesForSprint(sprintId) {
 }
 
 export async function updateIssueOrder(updatedIssues) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -88,7 +86,7 @@ export async function updateIssueOrder(updatedIssues) {
 }
 
 export async function updateIssue(issueId, data) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -129,7 +127,7 @@ export async function updateIssue(issueId, data) {
 }
 
 export async function deleteIssue(issueId) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {

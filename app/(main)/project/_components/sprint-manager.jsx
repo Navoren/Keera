@@ -2,10 +2,20 @@
 
 import { updateSprintStatus } from '@/actions/sprints';
 import useFetch from '@/app/hooks/use-fetch';
-import { formatDistanceToNow, isAfter, isBefore } from 'date-fns';
+import { formatDistanceToNow, isAfter, isBefore, format } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { BarLoader } from 'react-spinners';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 const SprintManager = ({ sprint, setSprint, sprints, projectId }) => {
     const [status, setStatus] = useState(sprint.status);
@@ -13,7 +23,7 @@ const SprintManager = ({ sprint, setSprint, sprints, projectId }) => {
     const searchParams = useSearchParams();
 
     const {
-        fn: updatStatus,
+        fn: updateStatus,
         loading,
         error,
         data: updatedStatus
@@ -27,7 +37,7 @@ const SprintManager = ({ sprint, setSprint, sprints, projectId }) => {
     const canEnd = status === 'ACTIVE';
 
     const handleStatusChange = async (newStatus) => {
-        updateSprintStatus(sprint.id, newStatus);
+        updateStatus(sprint.id, newStatus);
     }
 
     useEffect(() => {
@@ -72,7 +82,7 @@ const SprintManager = ({ sprint, setSprint, sprints, projectId }) => {
 };
 
 return (
-<>
+<div className='py-8'>
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <Select value={sprint.id} onValueChange={handleSprintChange}>
         <SelectTrigger className="bg-muted text-foreground">
@@ -82,7 +92,7 @@ return (
         {sprints.map((sprint) => (
             <SelectItem key={sprint.id} value={sprint.id}>
             {sprint.name} (
-            {format(sprint.startDate, "MMM d, yyyy")} –{" "}
+            {format(sprint.startDate, "MMM d, yyyy")} to{" "}
             {format(sprint.endDate, "MMM d, yyyy")})
             </SelectItem>
         ))}
@@ -117,7 +127,7 @@ return (
         width="100%"
         height={4}
         className="mt-3 rounded"
-        color="indigo"
+        color="white"
     />
     )}
 
@@ -126,7 +136,7 @@ return (
         {getStatusText()}
     </Badge>
     )}
-</>
+</div>
 );
 
 }

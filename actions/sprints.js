@@ -44,7 +44,7 @@ export async function createSprint( projectId, data) {
 }
 
 export async function updateSprintStatus(sprintId, newStatus) {
-    const { userId, sessionClaims } = await auth();
+    const { userId, sessionClaims } = auth();
     const orgId = sessionClaims?.o?.id;
     const orgRole = sessionClaims?.o?.rol;
 
@@ -87,7 +87,7 @@ export async function updateSprintStatus(sprintId, newStatus) {
             data: { status: newStatus },
         });
 
-        return { updatedSprint, message: `Sprint status updated to ${newStatus}`, success: true };
+        return { sprint: updatedSprint, message: `Sprint status updated to ${newStatus}`, success: true };
     } catch (error) {
         console.error("Error updating sprint status:", error.message);
         throw new Error("Failed to update sprint status");
