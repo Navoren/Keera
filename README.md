@@ -1,4 +1,4 @@
-# Keera
+# Keera - Orchestrate the Chaos
 
 Keera is a modern project management platform built with Next.js, designed to help teams organize, track, and deliver projects efficiently.
 
@@ -14,9 +14,9 @@ Keera is a modern project management platform built with Next.js, designed to he
 
 Watch a walkthrough of Keera in action:
 
-[![Watch the demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE)
+https://github.com/user-attachments/assets/6e86a224-9013-4272-b7fe-b6b0a112a8c6
 
-> Click the image or [this link](https://x.com/nmntmr/status/1934999919619952951) to view the demo on X.
+> Click [this link](https://x.com/nmntmr/status/1934999919619952951) to view the demo on X.
 
 ## Getting Started
 
