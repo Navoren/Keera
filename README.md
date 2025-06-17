@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Keera
+
+Keera is a modern project management platform built with Next.js, designed to help teams organize, track, and deliver projects efficiently.
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) – React framework for building web applications
+- [Prisma](https://www.prisma.io/) – Type-safe ORM for database access
+- [Clerk](https://clerk.com/) – Authentication and user management
+- [NeonDB](https://neon.tech/) – Serverless PostgreSQL database
+- [Vercel](https://vercel.com/) – Deployment platform
+
+## Live Video Demo
+
+Watch a walkthrough of Keera in action:
+
+[![Watch the demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE)
+
+> Click the image or [this link](https://x.com/nmntmr/status/1934999919619952951) to view the demo on X.
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/keera.git
+cd keera
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Set Up Environment Variables
+
+Create a `.env.local` file in the root directory and add the following variables:
+
+```env
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+# Clerk URLs
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_URL_SIGN_IN=/onboarding
+NEXT_PUBLIC_CLERK_SIGN_IN_URL_SIGN_UP=/onboarding
+
+# Database
+DATABASE_URL=your_neondb_connection_string
+
+# Next.js
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Prisma
+PRISMA_CLIENT_ENGINE_TYPE=binary
+
+# Optional: Vercel
+VERCEL_ENV=development
+```
+
+> Replace the values with your actual credentials.
+
+### 4. Run Database Migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### 5. Start the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visit [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs/)
+- [Clerk Documentation](https://clerk.com/docs)
+- [NeonDB Documentation](https://neon.tech/docs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Deploy easily on [Vercel](https://vercel.com/). See [Next.js deployment docs](https://nextjs.org/docs/app/building-your-application/deploying) for more info.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
