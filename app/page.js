@@ -1,5 +1,5 @@
 "use client";
- 
+
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Particles } from "@/components/magicui/particles";
@@ -11,7 +11,6 @@ import {
   Calendar,
   BarChart,
 } from "lucide-react";
-
 
 const faqs = [
   {
@@ -46,8 +45,6 @@ const faqs = [
   },
 ];
 
-
-
 const features = [
   {
     title: "Smart Kanban Boards",
@@ -69,43 +66,46 @@ const features = [
   },
 ];
 
-
 export default function Home() {
   const { resolvedTheme } = useTheme();
   const [color, setColor] = useState("#ffffff");
- 
+
   useEffect(() => {
     setColor(resolvedTheme === "dark" ? "#ffffff" : "#000000");
   }, [resolvedTheme]);
- 
+
   return (
     <>
-      <section id="hero" className=""> 
-    <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg ">
-      <span className="pointer-events-none z-10 whitespace-pre-wrap text-center text-8xl font-semibold leading-none">
-        Orgainze your projects with <span className="underline decoration-indigo-500/30">Keera</span>
-      </span>
-      <span className="pointer-events-none z-10 mt-4 text-center text-lg text-muted-foreground">
-        A Jira clone for managing your projects, tasks, and teams.
-      </span>
-        <div className="flex items-center justify-center gap-3 text-center mt-4">
-          <Button className="bg-indigo-500 hover:bg-indigo-600 text-white">
-            <Link className="flex justify-center items-center" href="/onboarding">Get Started <ChevronRight /></Link>
-          </Button>
-          <Button>
-            <Link href="#features">Learn More</Link>
-          </Button>
+      <section id="hero" className="">
+        <div className="relative flex min-h-[400px] sm:h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg px-4 text-center">
+          <span className="pointer-events-none z-10 whitespace-pre-wrap text-4xl sm:text-6xl md:text-8xl font-semibold leading-tight sm:leading-none">
+            Organize your projects with{" "}
+            <span className="underline decoration-indigo-500/30">Keera</span>
+          </span>
+          <span className="pointer-events-none z-10 mt-4 text-base sm:text-lg text-muted-foreground">
+            Your buddy for managing your projects, tasks, and teams.
+          </span>
+          <div className="z-10 mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button className="bg-indigo-500 hover:bg-indigo-600 text-white w-full sm:w-auto">
+              <Link className="flex justify-center items-center gap-1" href="/onboarding">
+                Get Started <ChevronRight />
+              </Link>
+            </Button>
+            <Button className="w-full sm:w-auto">
+              <Link href="#features">Learn More</Link>
+            </Button>
+          </div>
+          <Particles
+            className="absolute inset-0 z-0"
+            quantity={500}
+            ease={80}
+            color={color}
+            refresh
+          />
         </div>
-      <Particles
-        className="absolute inset-0 z-0"
-        quantity={500}
-        ease={80}
-        color={color}
-        refresh
-      />
-    </div>
       </section>
-      <section id="features" className="py-18 "> 
+
+      <section id="features" className="py-18 ">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -119,6 +119,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <section id="faq" className="py-18 ">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
@@ -131,38 +132,36 @@ export default function Home() {
             ))}
           </div>
         </div>
-
       </section>
-      <section id="get-started" className="relative py-24 bg-transparent overflow-hidden">
-  <div className="absolute inset-0 -z-10">
-    <Particles
-      className="w-full h-full"
-      quantity={50}
-      ease={80}
-      color={color}
-      refresh
-    />
-  </div>
 
+      <section id="get-started" className="relative py-24 bg-transparent overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <Particles
+            className="w-full h-full"
+            quantity={50}
+            ease={80}
+            color={color}
+            refresh
+          />
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col text-center mb-12">
             <h2 className="text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-10">
               Get Started with Keera
             </h2>
-            <p className="text-sm font-light"> Experience the power of Keera for free. Sign up today and transform the way you manage your projects and teams. </p>
+            <p className="text-sm font-light">
+              Experience the power of Keera for free. Sign up today and transform the way you manage your projects and teams.
+            </p>
           </div>
-    
-          
-    <div className="flex justify-center">
-      <Link href="/onboarding">
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg px-6 py-3 text-lg font-semibold cursor-pointer">
-          Start Your Free Trial
-        </Button>
-      </Link>
-    </div>
-  </div>
-</section>
-
+          <div className="flex justify-center">
+            <Link href="/onboarding">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg px-6 py-3 text-lg font-semibold cursor-pointer">
+                Start Your Free Trial
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
