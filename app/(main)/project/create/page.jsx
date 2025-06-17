@@ -117,7 +117,7 @@ if(isAdmin) {
             )}
             </div>
             {loading && (
-            <BarLoader className="mb-4" width={"100%"} color="indgo-700" />
+            <BarLoader className="mb-4" width={"100%"} color="#4F46E5" />
             )}
 
             <div className="flex justify-end cursor-pointer">

@@ -1,4 +1,6 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 import {
 Card,
 CardContent,
@@ -10,7 +12,7 @@ import { UserIcon, AlarmClock, Flag } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import UserAvatar from "./user-avatar";
 import IssueDialog from "./issue-dialog";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const priorityColors = {
   LOW: "text-teal-300 border-teal-500 bg-teal-900/40",
@@ -20,7 +22,11 @@ const priorityColors = {
 };
 
 
-export default function IssueCard({ issue, showStatus = false }) {
+export default function IssueCard({ issue,
+  showStatus = false,
+  onDelete = () => {},
+  onUpdate = () => { },
+}) {
 const created = formatDistanceToNow(new Date(issue.createdAt), {
     addSuffix: true,
 });
@@ -42,7 +48,8 @@ const created = formatDistanceToNow(new Date(issue.createdAt), {
     return (
     <>
     <Card
-    className={`cursor-pointer transition-all border-t-4 rounded-lg shadow-sm hover:shadow-lg hover:-rotate-1 hover:scale-[1.01] duration-300 ease-in-out ${priorityColors[issue.priority]}`}
+        className={`cursor-pointer transition-all border-t-4 rounded-lg shadow-sm hover:shadow-lg hover:-rotate-1 hover:scale-[1.01] duration-300 ease-in-out ${priorityColors[issue.priority]}`}
+        onClick={() => setisDialogOpen(true)}
     >
     <div className="p-4 space-y-3">
         <CardTitle className="text-base font-semibold text-foreground">

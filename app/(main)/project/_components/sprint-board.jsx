@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SyncLoader } from "react-spinners";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import useFetch from "@/app/hooks/use-fetch";
 import { getIssuesForSprint, updateIssueOrder } from "@/actions/issues";
-import SprintManager from "./sprint-manager";
+import useFetch from "@/app/hooks/use-fetch";
 import IssueCard from "@/components/issue-card";
+import { Button } from "@/components/ui/button";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { toast } from "sonner";
+import BoardFilters from "./board-filters";
 import CreateIssueBox from "./issue-create";
+import SprintManager from "./sprint-manager";
 
 const statuses = [
 { name: "Todo", key: "TODO" },
@@ -35,6 +36,10 @@ const {
 } = useFetch(getIssuesForSprint);
 
 const [filteredIssues, setFilteredIssues] = useState([]);
+
+    const handleFilterChange = (newFilteredIssues) => {
+        setFilteredIssues(newFilteredIssues);
+}
 
 useEffect(() => {
     setFilteredIssues(issues || []);
@@ -136,6 +141,10 @@ return (
         projectId={projectId}
     />
 
+        {issues && !issuesLoading && (
+            <BoardFilters issues={issues} onFilterChange={handleFilterChange} />
+    )}
+
     {updateIssuesError && (
         <p className="text-red-500 mt-2 text-sm text-center">
         {updateIssuesError.message}
@@ -144,7 +153,7 @@ return (
 
     {(updateIssuesLoading || issuesLoading) && (
         <div className="flex justify-end mt-8">
-        <SyncLoader color="#36d7b7" size={12} />
+        <SyncLoader color="#4F46E5" size={12} />
         </div>
     )}
 

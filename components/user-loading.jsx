@@ -9,7 +9,7 @@ const UserLoading = () => {
   const { isLoaded: isUserLoaded } = useUser();
 
   if (!isLoaded || !isUserLoaded) {
-    return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
+    return <BarLoader className="mb-4" width={"100%"} color="#4F46E5" />;
   } else <></>;
 };
 

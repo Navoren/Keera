@@ -20,164 +20,218 @@ SelectTrigger,
 SelectValue,
 } from "@/components/ui/select";
 import { BarLoader } from "react-spinners";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Trash2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import {
+AlertDialog,
+AlertDialogAction,
+AlertDialogCancel,
+AlertDialogContent,
+AlertDialogFooter,
+AlertDialogHeader,
+AlertDialogTitle,
+AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-import statuses from "@/data/status";
 import { deleteIssue, updateIssue } from "@/actions/issues";
 
 const priorityOptions = ["LOW", "MEDIUM", "HIGH", "URGENT"];
+const statuses = [
+{ name: "Todo", key: "TODO" },
+{ name: "In Progress", key: "IN_PROGRESS" },
+{ name: "In Review", key: "IN_REVIEW" },
+{ name: "Done", key: "DONE" },
+];
 
 const IssueDialog = ({
-    issue,
-    isOpen,
-    onClose,
-    onDelete = () => { },
-    onUpdate = () => { },
-    borderCol = "",
+issue,
+isOpen,
+onClose,
+onDelete = () => {},
+onUpdate = () => {},
+borderCol = "",
 }) => {
-    const [status, setStatus] = useState(issue.status);
-    const [priority, setPriority] = useState(issue.priority);
-    const { user } = useUser();
-    const { membership } = useOrganization();
-    const router = useRouter();
-    const pathname = usePathname();
+const [status, setStatus] = useState(issue.status);
+const [priority, setPriority] = useState(issue.priority);
+const { user } = useUser();
+const { membership } = useOrganization();
+const router = useRouter();
+const pathname = usePathname();
 
-    const {
-        loading: updateLoading,
-        error: updateError,
-        fn: updateIssueFn,
-        data : updated,
-    } = useFetch(updateIssue);
+const {
+    loading: updateLoading,
+    error: updateError,
+    fn: updateIssueFn,
+    data: updated,
+} = useFetch(updateIssue);
 
-    const { 
-        loading: deleteLoading,
-        error: deleteError,
-        fn: deleteIssueFn,
-        data: deleted,
-    } = useFetch(deleteIssue);
+const {
+    loading: deleteLoading,
+    error: deleteError,
+    fn: deleteIssueFn,
+    data: deleted,
+} = useFetch(deleteIssue);
 
-    const handleDelete = async () => {
-        if (window.confirm("Are you sure you want to delete this issue?")) {
-            deleteIssueFn(issue.id);
-        }
-    };
+const canChange =
+    user.id === issue.reporter.clerkUserId || membership.role === "org:admin";
 
-    const handlePriorityChange = async (newPriority) => {
-        setPriority(newPriority);
-        updateIssueFn(issue.id, { status, priority: newPriority });
-    };
-
-    const handleStatusChange = async (newStatus) => {
-        setStatus(newStatus);
-        updateIssueFn(issue.id, { status: newStatus, priority });
+useEffect(() => {
+    if (deleted) {
+    onClose();
+    onDelete();
     }
-
-    useEffect(() => {
-        if (deleted) {
-            onClose();
-            onDelete();
-        }
-        if (updated) {
-            onUpdate(updated);
-        }
-    }, [deleted, updated, deleteLoading, updateLoading]);
-
-    const canChange = user.id === issue.reporter.clerkUserId || membership.role === 'org:admin';
-
-    const handleGoToProject = () => {
-        router.push(`/project/${issue.projectId}?sprint=${issue.sprintId}`);
+    if (updated) {
+    onUpdate(updated);
     }
+}, [deleted, updated]);
 
-    const isProjectPage = !pathname.startsWith('/project/');
+const handleDelete = async () => {
+    deleteIssueFn(issue.id);
+};
 
-    return (
+const handlePriorityChange = async (newPriority) => {
+    setPriority(newPriority);
+    updateIssueFn(issue.id, { status, priority: newPriority });
+};
+
+const handleStatusChange = async (newStatus) => {
+    setStatus(newStatus);
+    updateIssueFn(issue.id, { status: newStatus, priority });
+};
+
+const handleGoToProject = () => {
+    router.push(`/project/${issue.projectId}?sprint=${issue.sprintId}`);
+};
+
+const isProjectPage = !pathname.startsWith("/project/");
+
+return (
+    <>
     <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent>
+        <DialogContent className="space-y-6 bg-background/90 border border-border rounded-2xl shadow-xl">
         <DialogHeader>
-        <div className="flex justify-between items-center">
-            <DialogTitle className="text-3xl">{issue.title}</DialogTitle>
+            <div className="flex justify-between items-center">
+            <DialogTitle className="text-2xl font-semibold text-white">
+                {issue.title}
+            </DialogTitle>
             {isProjectPage && (
-            <Button
+                <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleGoToProject}
                 title="Go to Project"
-            >
-                <ExternalLink className="h-4 w-4" />
-            </Button>
+                >
+                <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                </Button>
             )}
-        </div>
+            </div>
         </DialogHeader>
+
         {(updateLoading || deleteLoading) && (
-        <BarLoader width={"100%"} color="#36d7b7" />
+            <BarLoader width="100%" color="white" />
         )}
-        <div className="space-y-4">
-        <div className="flex items-center space-x-2">
+
+        <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-muted-foreground">
+                Status
+            </span>
             <Select value={status} onValueChange={handleStatusChange}>
-            <SelectTrigger className="">
+                <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
+                </SelectTrigger>
+                <SelectContent>
                 {statuses.map((option) => (
-                <SelectItem key={option.key} value={option.key}>
+                    <SelectItem key={option.key} value={option.key}>
                     {option.name}
-                </SelectItem>
+                    </SelectItem>
                 ))}
-            </SelectContent>
+                </SelectContent>
             </Select>
+            </div>
+            <div className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-muted-foreground">
+                Priority
+            </span>
             <Select
-            value={priority}
-            onValueChange={handlePriorityChange}
-            disabled={!canChange}
+                value={priority}
+                onValueChange={handlePriorityChange}
+                disabled={!canChange}
             >
-            <SelectTrigger className={`border ${borderCol} rounded`}>
+                <SelectTrigger className={`w-40 border ${borderCol}`}>
                 <SelectValue placeholder="Priority" />
-            </SelectTrigger>
-            <SelectContent>
+                </SelectTrigger>
+                <SelectContent>
                 {priorityOptions.map((option) => (
-                <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option}>
                     {option}
-                </SelectItem>
+                    </SelectItem>
                 ))}
-            </SelectContent>
+                </SelectContent>
             </Select>
+            </div>
         </div>
-        <div>
-            <h4 className="font-semibold">Description</h4>
+
+        <div className="space-y-2">
+            <h4 className="font-semibold text-slate-300">Description</h4>
             <MDEditor.Markdown
-            className="rounded px-2 py-1"
-            source={issue.description ? issue.description : "--"}
+            source={issue.description || "--"}
+            className="prose dark:prose-invert border rounded-md p-3 bg-slate-900"
             />
         </div>
-        <div className="flex justify-between">
+
+        <div className="flex justify-between gap-4">
             <div className="flex flex-col gap-2">
-            <h4 className="font-semibold">Assignee</h4>
+            <h4 className="text-sm font-medium text-muted-foreground">
+                Assignee
+            </h4>
             <UserAvatar user={issue.assignee} />
             </div>
             <div className="flex flex-col gap-2">
-            <h4 className="font-semibold">Reporter</h4>
+            <h4 className="text-sm font-medium text-muted-foreground">
+                Reporter
+            </h4>
             <UserAvatar user={issue.reporter} />
             </div>
         </div>
+
         {canChange && (
-            <Button
-            onClick={handleDelete}
-            disabled={deleteLoading}
-            variant="destructive"
-            >
-            {deleteLoading ? "Deleting..." : "Delete Issue"}
-            </Button>
+            <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button
+                variant="destructive"
+                className="w-full gap-2 cursor-pointer"
+                disabled={deleteLoading}
+                >
+                <Trash2 className="w-4 h-4" />
+                {deleteLoading ? "Deleting..." : "Delete Issue"}
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                <AlertDialogTitle>
+                    Are you sure you want to delete this issue?
+                </AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                <AlertDialogCancel className='cursor-pointer'>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className='cursor-pointer'>
+                    Yes, delete it
+                </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+            </AlertDialog>
         )}
+
         {(deleteError || updateError) && (
-            <p className="text-red-500">
+            <p className="text-sm text-red-500 text-center">
             {deleteError?.message || updateError?.message}
             </p>
         )}
-        </div>
-    </DialogContent>
+        </DialogContent>
     </Dialog>
+    </>
 );
-}
+};
 
-export default IssueDialog
+export default IssueDialog;

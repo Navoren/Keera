@@ -108,7 +108,7 @@ export default function CreateIssueBox({
         <div className="p-6">
           {usersLoading && (
             <div className="flex justify-center py-4">
-              <BarLoader width="100%" color="#3b82f6" />
+              <BarLoader width="100%" color="#4F46E5" />
             </div>
           )}
 

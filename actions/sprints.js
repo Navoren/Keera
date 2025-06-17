@@ -44,7 +44,7 @@ export async function createSprint( projectId, data) {
 }
 
 export async function updateSprintStatus(sprintId, newStatus) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
     const orgRole = sessionClaims?.o?.rol;
 

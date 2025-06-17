@@ -1,10 +1,10 @@
 'use server';
 
-import {db} from "@/lib/prisma";
+import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
 export async function createIssue(projectId, data) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -44,7 +44,7 @@ export async function createIssue(projectId, data) {
 }
 
 export async function getIssuesForSprint(sprintId) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -64,7 +64,7 @@ export async function getIssuesForSprint(sprintId) {
 }
 
 export async function updateIssueOrder(updatedIssues) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -86,7 +86,7 @@ export async function updateIssueOrder(updatedIssues) {
 }
 
 export async function updateIssue(issueId, data) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -127,7 +127,7 @@ export async function updateIssue(issueId, data) {
 }
 
 export async function deleteIssue(issueId) {
-    const { userId, sessionClaims } = auth();
+    const { userId, sessionClaims } = await auth();
     const orgId = sessionClaims?.o?.id;
 
     if (!userId || !orgId) {
@@ -167,4 +167,37 @@ export async function deleteIssue(issueId) {
         throw new Error("Failed to delete issue");
         
     }
+}
+
+export async function getUserIssues(userId) {
+    const { sessionClaims } = await auth();
+    const orgId = sessionClaims?.o?.id;
+
+    if (!userId || !orgId) {
+        throw new Error('No user id or organization is found');
+    }
+
+    const user = await db.user.findUnique({
+        where: { clerkUserId: userId }
+    });
+
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const issues = await db.issue.findMany({
+        where: {
+            OR: [{ assigneeId: user.id }, { reporterId: user.id }],
+            project: {
+                organizationId: orgId,
+            },
+        },
+        include: {
+            project: true,
+            assignee: true,
+            reporter: true,
+        },
+        orderBy: {updatedAt: "desc"},
+    });
+    return issues;
 }

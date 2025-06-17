@@ -13,8 +13,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Keera",
-  description: "A Jira Clone for managing your projects",
+  title: "Keera – Orchestrate the Chaos",
+  description: "Keera helps you bring clarity, structure, and flow to your team's projects and priorities.",
 };
 
 export default function RootLayout({ children }) {
