@@ -89,11 +89,12 @@ enum SprintStatus {
 enum IssuesStatus {
   TODO
   IN_PROGRESS
+  IN_REVIEW
   DONE
 }
 enum IssuePriority {
   LOW
   MEDIUM
   HIGH
-  CRITICAL
+  URGENT
 }
